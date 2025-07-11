@@ -21,7 +21,7 @@ export default class UserController {
         gender
       );
 
-      res.send({
+      res.status(201).send({
         success: true,
         message: "User registered successfully",
         response,

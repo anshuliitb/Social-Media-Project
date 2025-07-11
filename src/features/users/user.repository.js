@@ -67,8 +67,9 @@ export default class UserRepository {
 
   async updateUserDetails(id, userData) {
     let userFromDb = await UserModel.findByIdAndUpdate(id, userData, {
-      select: "-password -tokens -__v",
       new: true,
+      runValidators: true,
+      projection: "-password -tokens -__v",
     });
     return userFromDb;
   }
