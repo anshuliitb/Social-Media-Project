@@ -25,4 +25,20 @@ userRouter
     userController.logoutAllDevices(req, res, next)
   );
 
+userRouter
+  .route("/get-details/:userId")
+  .get(jwtAuth, (req, res, next) => userController.getDetails(req, res, next));
+
+userRouter
+  .route("/get-all-details")
+  .get(jwtAuth, (req, res, next) =>
+    userController.getAllDetails(req, res, next)
+  );
+
+userRouter
+  .route("/update-details/:userId")
+  .put(jwtAuth, (req, res, next) =>
+    userController.updateDetails(req, res, next)
+  );
+
 export default userRouter;

@@ -54,4 +54,22 @@ export default class UserRepository {
     userFromDb.tokens = [];
     await userFromDb.save();
   }
+
+  async getUserDetails(id) {
+    const userFromDb = await UserModel.findById(id).select("-password");
+    return userFromDb;
+  }
+
+  async getAllUserDetails() {
+    const users = await UserModel.find().select("-password");
+    return users;
+  }
+
+  async updateUserDetails(id, userData) {
+    let userFromDb = await UserModel.findByIdAndUpdate(id, userData, {
+      select: "-password -tokens -__v",
+      new: true,
+    });
+    return userFromDb;
+  }
 }
