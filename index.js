@@ -6,6 +6,7 @@ import postsRouter from "./src/features/posts/post.routes.js";
 import ErrorHandlingMiddleware from "./src/errorHandlers/appErrorHandler.middleware.js";
 import jwtAuth from "./src/middlewares/jwtAuth.js";
 import commentsRouter from "./src/features/comments/comments.routes.js";
+import otpRouter from "./src/features/otp/otp.routes.js";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/posts", jwtAuth, postsRouter);
 app.use("/api/comments", jwtAuth, commentsRouter);
+app.use("/api/otp", otpRouter);
 
 app.use(ErrorHandlingMiddleware);
 
