@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import fs from "fs";
 
 import PostsRepository from "./post.repository.js";
 import CustomError from "../../errorHandlers/customErrorClass.js";
@@ -10,13 +11,18 @@ export default class PostsController {
 
   async createPost(req, res, next) {
     try {
-      const { title, body, imageUrl } = req.body;
+      const { title, body } = req.body;
+
+      const imagePath = req.file?.path.replace(/\\/g, "/").replace("src/", "");
+      const imageUrl = `${req.protocol}://${req.get("host")}/${imagePath}`;
+
       const post = await this.postsRepository.createNewPost(
         title,
         body,
         imageUrl,
         req.user._id
       );
+      throw new Error("created");
 
       res.status(201).send({
         success: true,
@@ -25,6 +31,17 @@ export default class PostsController {
       });
     } catch (error) {
       console.log(error);
+
+      const savedImagePath = req.file?.path;
+      if (savedImagePath) {
+        fs.unlink(savedImagePath, (err) => {
+          if (err) console.log("Error deleting avatar after failure:", err);
+          else
+            console.log(
+              "Deleted saved image file as error occurred during registration!"
+            );
+        });
+      }
 
       res.status(400).send({
         success: false,

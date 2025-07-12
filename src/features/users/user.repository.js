@@ -5,12 +5,13 @@ import { verifyHashedPassword } from "../../utils/user.passwordHashing.js";
 import UserModel from "./user.registration.model.js";
 
 export default class UserRepository {
-  async registerUser(name, email, password, gender) {
+  async registerUser(name, email, password, gender, avatarUrl) {
     const newUser = new UserModel({
       name,
       email,
       password,
       gender,
+      avatarUrl,
     });
 
     return await newUser.save();

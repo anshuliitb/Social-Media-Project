@@ -2,6 +2,7 @@ import express from "express";
 
 import UserController from "./user.controller.js";
 import jwtAuth from "../../middlewares/jwtAuth.js";
+import { uploadAvatar } from "../../middlewares/fileUpload.middleware.js";
 
 const userController = new UserController();
 
@@ -9,7 +10,9 @@ const userRouter = express.Router();
 
 userRouter
   .route("/signup")
-  .post((req, res, next) => userController.signUp(req, res, next));
+  .post(uploadAvatar.single("avatarImage"), (req, res, next) =>
+    userController.signUp(req, res, next)
+  );
 
 userRouter
   .route("/signin")

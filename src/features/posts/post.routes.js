@@ -1,5 +1,6 @@
 import express from "express";
 import PostsController from "./post.controller.js";
+import { uploadPostImage } from "../../middlewares/fileUpload.middleware.js";
 
 const postsController = new PostsController();
 
@@ -7,7 +8,9 @@ const postsRouter = express.Router();
 
 postsRouter
   .route("/")
-  .post((req, res, next) => postsController.createPost(req, res, next));
+  .post(uploadPostImage.single("postImage"), (req, res, next) =>
+    postsController.createPost(req, res, next)
+  );
 
 postsRouter
   .route("/all")

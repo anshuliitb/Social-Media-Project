@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import fs from "fs";
 
 import UserRepository from "./user.repository.js";
 import { hashingPassword } from "../../utils/user.passwordHashing.js";
@@ -13,12 +14,15 @@ export default class UserController {
     try {
       const { name, email, password, gender } = req.body;
       const hashedPassword = await hashingPassword(password);
+      const avatarPath = req.file?.path.replace(/\\/g, "/").replace("src/", "");
+      const avatarUrl = `${req.protocol}://${req.get("host")}/${avatarPath}`;
 
       const response = await this.userRepository.registerUser(
         name,
         email,
         hashedPassword,
-        gender
+        gender,
+        avatarUrl
       );
 
       res.status(201).send({
@@ -28,6 +32,17 @@ export default class UserController {
       });
     } catch (error) {
       console.log(error);
+
+      const savedImagePath = req.file?.path;
+      if (savedImagePath) {
+        fs.unlink(savedImagePath, (err) => {
+          if (err) console.log("Error deleting avatar after failure:", err);
+          else
+            console.log(
+              "Deleted saved image file as error occurred during registration!"
+            );
+        });
+      }
 
       res.status(400).send({
         success: false,

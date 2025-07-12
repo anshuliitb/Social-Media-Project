@@ -6,10 +6,7 @@ const postSchema = new mongoose.Schema(
     body: { type: String, required: true },
     imageUrl: {
       type: String,
-      match: [
-        /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/[^\s]*)?$/,
-        "Enter a valid url",
-      ],
+      required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
