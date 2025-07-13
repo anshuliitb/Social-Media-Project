@@ -1,16 +1,4 @@
-// import {
-//   generateOtp,
-//   storeOtp,
-//   verifyStoredOtp,
-// } from "../utils/otpGeneratorUtil.js";
-// import { sendOtpToEmail } from "../utils/otpMailerUtil.js";
-// import { hashPassword } from "../utils/otpPasswordUtil.js";
-// import {
-//   findUserByEmail,
-//   updateUserPassword,
-// } from "../repositories/otpUserRepository.js";
-
-import { hashingPassword } from "../../utils/user.passwordHashing.js";
+import { hashingPassword } from "../../utils/users.passwordHashing.js";
 import OtpRepository from "./otp.repository.js";
 import {
   generateOtp,

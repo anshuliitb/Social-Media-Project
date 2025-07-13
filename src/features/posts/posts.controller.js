@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import fs from "fs";
 
-import PostsRepository from "./post.repository.js";
+import PostsRepository from "./posts.repository.js";
 import CustomError from "../../errorHandlers/customErrorClass.js";
 
 export default class PostsController {
@@ -22,7 +22,6 @@ export default class PostsController {
         imageUrl,
         req.user._id
       );
-      throw new Error("created");
 
       res.status(201).send({
         success: true,

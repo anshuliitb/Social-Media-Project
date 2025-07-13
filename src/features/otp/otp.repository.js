@@ -1,4 +1,4 @@
-import UserModel from "../users/user.registration.model.js";
+import UserModel from "../users/users.model.js";
 
 export default class OtpRepository {
   async findUserByEmail(email) {

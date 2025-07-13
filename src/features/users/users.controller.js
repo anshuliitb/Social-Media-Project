@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import fs from "fs";
 
-import UserRepository from "./user.repository.js";
-import { hashingPassword } from "../../utils/user.passwordHashing.js";
+import UserRepository from "./users.repository.js";
+import { hashingPassword } from "../../utils/users.passwordHashing.js";
 import CustomError from "../../errorHandlers/customErrorClass.js";
 
 export default class UserController {
@@ -15,7 +15,9 @@ export default class UserController {
       const { name, email, password, gender } = req.body;
       const hashedPassword = await hashingPassword(password);
       const avatarPath = req.file?.path.replace(/\\/g, "/").replace("src/", "");
-      const avatarUrl = `${req.protocol}://${req.get("host")}/${avatarPath}`;
+      const avatarUrl = avatarPath
+        ? `${req.protocol}://${req.get("host")}/${avatarPath}`
+        : undefined;
 
       const response = await this.userRepository.registerUser(
         name,

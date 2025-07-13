@@ -1,7 +1,7 @@
 import express from "express";
 
-import UserController from "./user.controller.js";
-import jwtAuth from "../../middlewares/jwtAuth.js";
+import UserController from "./users.controller.js";
+import jwtAuth from "../../middlewares/jwtAuth.middleware.js";
 import { uploadAvatar } from "../../middlewares/fileUpload.middleware.js";
 
 const userController = new UserController();

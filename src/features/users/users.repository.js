@@ -1,8 +1,12 @@
 import jwt from "jsonwebtoken";
 
 import CustomError from "../../errorHandlers/customErrorClass.js";
-import { verifyHashedPassword } from "../../utils/user.passwordHashing.js";
-import UserModel from "./user.registration.model.js";
+import { verifyHashedPassword } from "../../utils/users.passwordHashing.js";
+import UserModel from "./users.model.js";
+
+import LikeModel from "../likes/likes.model.js";
+import TokenModel from "./users.token.model.js";
+import FriendshipModel from "../friendship/friendship.model.js";
 
 export default class UserRepository {
   async registerUser(name, email, password, gender, avatarUrl) {
@@ -27,13 +31,10 @@ export default class UserRepository {
         const token = jwt.sign(
           { email, _id: userFromDb._id, role: "user" },
           JWT_SECRET_KEY,
-          {
-            expiresIn: "1h",
-          }
+          { expiresIn: "1h" }
         );
 
-        userFromDb.tokens.push(token);
-        await userFromDb.save();
+        await TokenModel.create({ userId: userFromDb._id, token });
 
         return token;
       } else {
@@ -45,20 +46,37 @@ export default class UserRepository {
   }
 
   async userLogout(id, token) {
-    const userFromDb = await UserModel.findById(id);
-    userFromDb.tokens = userFromDb.tokens.filter((t) => t !== token);
-    await userFromDb.save();
+    await TokenModel.deleteOne({ userId: id, token });
   }
 
   async userLogoutAllDevices(id) {
-    const userFromDb = await UserModel.findById(id);
-    userFromDb.tokens = [];
-    await userFromDb.save();
+    await TokenModel.deleteMany({ userId: id });
   }
 
   async getUserDetails(id) {
     const userFromDb = await UserModel.findById(id).select("-password");
-    return userFromDb;
+
+    const likeCount = await LikeModel.countDocuments({ userId: id });
+
+    const pendingFriendRequests = await FriendshipModel.countDocuments({
+      toUser: id,
+      status: "pending",
+    });
+
+    const friends = await FriendshipModel.find({
+      $or: [
+        { fromUser: id, status: "accepted" },
+        { toUser: id, status: "accepted" },
+      ],
+    });
+
+    const userWithLikeCount = {
+      ...userFromDb.toObject(),
+      likeCount,
+      pendingFriendRequests,
+      friends,
+    };
+    return userWithLikeCount;
   }
 
   async getAllUserDetails() {
@@ -67,10 +85,10 @@ export default class UserRepository {
   }
 
   async updateUserDetails(id, userData) {
-    let userFromDb = await UserModel.findByIdAndUpdate(id, userData, {
+    const userFromDb = await UserModel.findByIdAndUpdate(id, userData, {
       new: true,
       runValidators: true,
-      projection: "-password -tokens -__v",
+      projection: "-password -__v",
     });
     return userFromDb;
   }

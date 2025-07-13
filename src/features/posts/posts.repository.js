@@ -1,5 +1,7 @@
 import CustomError from "../../errorHandlers/customErrorClass.js";
-import PostsModel from "./post.model.js";
+import CommentsModel from "../comments/comments.model.js";
+import LikeModel from "../likes/likes.model.js";
+import PostsModel from "./posts.model.js";
 
 export default class PostsRepository {
   async createNewPost(title, body, imageUrl, userId) {
@@ -8,17 +10,36 @@ export default class PostsRepository {
   }
 
   async getAllPosts() {
-    const posts = await PostsModel.find();
+    const posts = await PostsModel.find().populate("userId", "name email");
     return posts;
   }
 
   async getPostbyId(id) {
-    const postFromDb = await PostsModel.findById(id);
-    return postFromDb;
+    const postFromDb = await PostsModel.findById(id).populate(
+      "userId",
+      "name email"
+    );
+
+    const likeCount = await LikeModel.countDocuments({
+      likeable: id,
+      onModel: "Post",
+    });
+    const commentCount = await CommentsModel.countDocuments({ postId: id });
+
+    const postWithCounts = {
+      ...postFromDb.toObject(),
+      likeCount,
+      commentCount,
+    };
+    return postWithCounts;
   }
 
   async getUserPosts(id) {
-    const posts = await PostsModel.find({ userId: id });
+    const posts = await PostsModel.find({ userId: id }).populate(
+      "userId",
+      "name email"
+    );
+
     return posts;
   }
 

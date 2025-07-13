@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 import CommentsRepository from "./comments.repository.js";
 import CommentsModel from "./comments.model.js";
-import PostsModel from "../posts/post.model.js";
+import PostsModel from "../posts/posts.model.js";
 
 export default class CommentsController {
   constructor() {

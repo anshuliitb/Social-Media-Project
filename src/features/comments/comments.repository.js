@@ -7,7 +7,10 @@ export default class CommentsRepository {
   }
 
   async getPostComments(postId) {
-    const comments = await CommentsModel.find({ postId });
+    const comments = await CommentsModel.find({ postId }).populate(
+      "user",
+      "name email"
+    );
     return comments;
   }
 

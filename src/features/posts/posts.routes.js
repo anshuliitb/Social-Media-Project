@@ -1,5 +1,5 @@
 import express from "express";
-import PostsController from "./post.controller.js";
+import PostsController from "./posts.controller.js";
 import { uploadPostImage } from "../../middlewares/fileUpload.middleware.js";
 
 const postsController = new PostsController();
