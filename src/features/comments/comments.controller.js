@@ -55,12 +55,18 @@ export default class CommentsController {
         });
       }
 
+      if (!(await PostsModel.findById(postId)))
+        return res.status(404).send({
+          success: false,
+          message: "Post not found!",
+        });
+
       const comments = await this.commentsRepository.getPostComments(postId);
 
       if (!comments == []) {
         res.send({
           success: true,
-          message: "Comment to the post retrieved successfully",
+          message: "Comments to the post retrieved successfully",
           response: comments,
         });
       } else {

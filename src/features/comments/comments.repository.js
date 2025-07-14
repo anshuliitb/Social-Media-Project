@@ -1,3 +1,4 @@
+import LikeModel from "../likes/likes.model.js";
 import CommentsModel from "./comments.model.js";
 
 export default class CommentsRepository {
@@ -8,10 +9,24 @@ export default class CommentsRepository {
 
   async getPostComments(postId) {
     const comments = await CommentsModel.find({ postId }).populate(
-      "user",
+      "userId",
       "name email"
     );
-    return comments;
+
+    const commentsWithLikes = await Promise.all(
+      comments.map(async (comment) => {
+        const likeCount = await LikeModel.countDocuments({
+          likeable: comment._id,
+        });
+
+        return {
+          ...comment.toObject(),
+          likeCount,
+        };
+      })
+    );
+
+    return commentsWithLikes;
   }
 
   async deleteOneComment(commentId) {

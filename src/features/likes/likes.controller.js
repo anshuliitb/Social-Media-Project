@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import CommentsModel from "../comments/comments.model.js";
 import PostsModel from "../posts/posts.model.js";
 import LikesRepository from "./likes.repository.js";
@@ -10,6 +12,24 @@ export default class LikesController {
   async getLikes(req, res) {
     try {
       const { id } = req.params;
+
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).send({
+          success: false,
+          message: "Invalid post / comment ID!",
+        });
+      }
+
+      if (
+        !(await PostsModel.findById(id)) &&
+        !(await CommentsModel.findById(id))
+      ) {
+        return res.status(400).send({
+          success: false,
+          message: "Post / comment not found!",
+        });
+      }
+
       const likes = await this.likesRepository.getLikesForItem(id);
 
       return res.json({ success: true, likes });

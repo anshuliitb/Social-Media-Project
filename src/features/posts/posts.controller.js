@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import PostsRepository from "./posts.repository.js";
 import CustomError from "../../errorHandlers/customErrorClass.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export default class PostsController {
   constructor() {
@@ -33,13 +38,13 @@ export default class PostsController {
 
       const savedImagePath = req.file?.path;
       if (savedImagePath) {
-        fs.unlink(savedImagePath, (err) => {
-          if (err) console.log("Error deleting avatar after failure:", err);
-          else
-            console.log(
-              "Deleted saved image file as error occurred during registration!"
-            );
-        });
+        try {
+          await fs.promises.unlink(savedImagePath);
+          console.log("Deleted saved post image file as error occurred!");
+        } catch (err) {
+          console.error("Error deleting post image after failure:", err);
+          throw new Error("Error deleting post image after failure!");
+        }
       }
 
       res.status(400).send({
@@ -161,6 +166,26 @@ export default class PostsController {
       );
 
       if (deletedPost) {
+        const imageUrl = deletedPost.imageUrl;
+        const imageSubPath = imageUrl.split("/uploads/")[1];
+        const savedImagePath = path.join(
+          __dirname,
+          "..",
+          "..",
+          "uploads",
+          imageSubPath
+        );
+
+        if (savedImagePath) {
+          try {
+            await fs.promises.unlink(savedImagePath);
+            console.log("Deleted saved post image file as post was deleted");
+          } catch (err) {
+            console.error("Error deleting post image after failure:", err);
+            throw new Error("Error deleting post image after failure:");
+          }
+        }
+
         return res.send({
           success: true,
           message: "Post deleted successfully",

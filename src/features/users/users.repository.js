@@ -34,7 +34,12 @@ export default class UserRepository {
           { expiresIn: "1h" }
         );
 
-        await TokenModel.create({ userId: userFromDb._id, token });
+        await TokenModel.create({
+          userId: userFromDb._id,
+          name: userFromDb.name,
+          email: userFromDb.email,
+          token,
+        });
 
         return token;
       } else {
@@ -63,7 +68,7 @@ export default class UserRepository {
       status: "pending",
     });
 
-    const friends = await FriendshipModel.find({
+    const friends = await FriendshipModel.countDocuments({
       $or: [
         { fromUser: id, status: "accepted" },
         { toUser: id, status: "accepted" },
