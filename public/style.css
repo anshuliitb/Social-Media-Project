@@ -76,11 +76,25 @@ a {
   text-decoration: none;
   font-weight: 500;
   transition: 0.3s ease;
+  cursor: pointer;
 }
 
 a:hover {
   color: #66fcf1;
   text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid #00e5ff;
+  outline-offset: 2px;
+}
+
+/* Footer */
+footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #bbbbbb;
 }
 
 /* Animation */

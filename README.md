@@ -9,7 +9,7 @@ Fully featured **Social Media Backend REST API** built with **Node.js**, **Expre
 ## 🌟 Key Features
 
 - 🔐 **User Registration & Authentication**: User signup with avatar upload, login, logout, and logout from all devices (JWT authentication with TTL-based storage)
-- 🖼️ **Avatar Upload**: Users can upload a profile picture during signup (handled via Multer)
+- 🖼️ **Avatar and Post Image Upload**: Users can upload a profile picture during signup and attach images to posts (handled via Multer).
 - 📝 **Post Management (CRUD)**: Create, update, and delete posts with automatic file cleanup
 - 💬 **Comment System**: Add, edit, or delete comments; only the commenter or the post owner can delete
 - ❤️ **Like Functionality**: Like/unlike both posts and comments; view like count and details
@@ -29,7 +29,7 @@ src/
 │   └── mongoose.js                       # MongoDB connection
 ├── errorHandlers/
 │   ├── customErrorClass.js               # Custom Error class
-│   └── appErrorHandler.middleware.js
+│   └── appErrorHandler.middleware.js     # Error handling middleware
 ├── middlewares/
 │   ├── jwtAuth.middleware.js             # JWT auth token verifier
 │   └── fileUpload.middleware.js          # Multer upload handlers
@@ -193,11 +193,12 @@ src/
 ## 🚀 AWS Deployment
 
 1. **Ubuntu EC2**: Instance running Node.js backend
-2. **Nginx**: Reverse proxy redirects `80 → 3000`
+2. **Nginx**: Reverse proxy redirects `80 → 4000`
 3. **Certbot / Let’s Encrypt**:
-   ```bash
+
+```bash
    sudo certbot --nginx -d anshulsocialmedia.xyz -d www.anshulsocialmedia.xyz
-   ```
+```
 
 PM2: Keeps app running continuously
 
@@ -271,9 +272,23 @@ On AWS, use pm2 and configure nginx + certbot (Let’s Encrypt) for production-r
 
 ## 🚧 Testing & API Documentation
 
-Postman: A complete Postman collection is available to test all API routes.
+🔍 **Postman Collection**:  
+A complete Postman collection is available to test all REST API endpoints of this project.
 
-Swagger (Optional): You can integrate Swagger using swagger-jsdoc + swagger-ui-express.
+👉 [Click here to open in Postman](https://www.postman.com/supply-astronaut-3411330/social-media-project/collection/qsf14w4/anshul-s-social-media-project?action=share&creator=38256946)
+
+You can import or fork this collection into your Postman workspace to:
+
+- Register, authenticate, and update user details
+- Upload avatars and post images
+- Create, read, update, and delete posts and comments
+- Like posts and comments
+- Manage friend requests (accept, reject, or leave them pending)
+- Reset passwords via OTP
+- And more...
+
+📌 **Note**: Fork this collection to your own workspace and proceed to test the application.  
+Refer to the `README.md` sections above for authentication instructions and required headers before testing protected routes.
 
 ---
 

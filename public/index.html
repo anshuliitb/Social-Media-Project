@@ -3,103 +3,127 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Anshul's Social Media Backend API - RESTful API built with Node.js, Express, and MongoDB. Features user auth, posts, comments, likes, friendships, and OTP password reset."
+    />
     <title>Welcome to Social Media API</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
+    <main class="container">
       <h1>🚀 Welcome to Anshul's Social Media Backend API</h1>
-      <p>
-        A fully featured <strong>social media backend</strong> developed using
-        <strong>Node.js</strong>, <strong>Express.js</strong>, and
-        <strong>MongoDB</strong>. This RESTful API provides core social
-        functionalities including <strong>user authentication</strong>,
-        <strong>post management</strong>, <strong>comments</strong>,
-        <strong>likes</strong>, <strong>friendship handling</strong>, and
-        <strong>OTP-based password reset</strong>. The application is
-        production-ready and deployed on <strong>AWS EC2</strong>, secured with
-        an <strong>Nginx reverse proxy</strong> and
-        <strong>Let's Encrypt SSL</strong> for HTTPS support.
-      </p>
 
-      <h2>🌟 Key Features</h2>
-      <ul>
-        <li>
-          🔐 <strong>User Registration & Authentication</strong>: User signup
-          with avatar upload, login, logout, and logout from all devices (JWT
-          authentication with TTL-based storage)
-        </li>
-        <li>
-          🖼️ <strong>Avatar Upload</strong>: Users can upload a profile picture
-          during signup (handled via Multer)
-        </li>
-        <li>
-          📝 <strong>Post Management (CRUD)</strong>: Create, update, and delete
-          posts with automatic file cleanup
-        </li>
-        <li>
-          💬 <strong>Comment System</strong>: Add, edit, or delete comments;
-          only the commenter or the post owner can delete
-        </li>
-        <li>
-          ❤️ <strong>Like Functionality</strong>: Like/unlike both posts and
-          comments; view like count and details
-        </li>
-        <li>
-          🤝 <strong>Friendship Management</strong>: Send/accept/reject friend
-          requests; toggle friendships; retrieve friends and pending requests
-        </li>
-        <li>
-          🔁 <strong>Password Reset via OTP</strong>: Secure OTP-based password
-          reset via email, including OTP generation, verification, and expiry
-          handling
-        </li>
-        <li>
-          🛠️ <strong>Custom Middleware</strong>: JWT authentication, file upload
-          handling, and centralized error management
-        </li>
-        <li>
-          🧩 <strong>Modular Architecture</strong>: Follows MVC and repository
-          pattern using ES6 modules for clean, scalable code
-        </li>
-        <li>
-          ☁️ <strong>Deployment</strong>: Fully deployed on AWS EC2 (Ubuntu)
-          with Nginx reverse proxy and HTTPS via Certbot (Let's Encrypt)
-        </li>
-      </ul>
+      <section>
+        <p>
+          A fully featured <strong>social media backend</strong> developed using
+          <strong>Node.js</strong>, <strong>Express.js</strong>, and
+          <strong>MongoDB</strong>. This RESTful API provides core social
+          functionalities including <strong>user authentication</strong>,
+          <strong>post management</strong>, <strong>comments</strong>,
+          <strong>likes</strong>, <strong>friendship handling</strong>, and
+          <strong>OTP-based password reset</strong>. The application is
+          production-ready and deployed on <strong>AWS EC2</strong>, secured
+          with an <strong>Nginx reverse proxy</strong> and
+          <strong>Let's Encrypt SSL</strong> for HTTPS support.
+        </p>
+      </section>
 
-      <h2>🔗 API Testing & Docs</h2>
-      <p>
-        <strong>Postman Collection:</strong>
-        <a
-          href="https://www.postman.com/supply-astronaut-3411330/social-media-project/collection/qsf14w4/anshul-s-social-media-project?action=share&creator=38256946"
-          target="_blank"
-          >Test the API via Postman</a
-        >
-      </p>
-      <p>
-        📘 For complete details, setup guide, and route descriptions, refer to
-        the
-        <a
-          href="https://github.com/anshuliitb/Social-Media-Project/blob/main/README.md"
-          target="_blank"
-          >README</a
-        >.
-      </p>
+      <section>
+        <h2>🌟 Key Features</h2>
+        <ul>
+          <li>
+            🔐 <strong>User Registration & Authentication</strong>: Users can
+            sign up, log in, and log out from one or all devices (JWT
+            authentication with TTL-based storage)
+          </li>
+          <li>
+            🖼️ <strong>Avatar & Post Image Upload</strong>: Users can upload a
+            profile picture during signup and attach images to posts (handled
+            via Multer)
+          </li>
+          <li>
+            📝 <strong>Post Management (CRUD)</strong>: Create, update, and
+            delete posts with automatic file cleanup
+          </li>
+          <li>
+            💬 <strong>Comment System</strong>: Add, edit, or delete comments;
+            only the commenter or the post owner can delete
+          </li>
+          <li>
+            ❤️ <strong>Like Functionality</strong>: Like/unlike both posts and
+            comments; view like count and details
+          </li>
+          <li>
+            🤝 <strong>Friendship Management</strong>: Send/accept/reject friend
+            requests; toggle friendships; retrieve friends and pending requests
+          </li>
+          <li>
+            🔁 <strong>Password Reset via OTP</strong>: Secure OTP-based
+            password reset via email, including OTP generation, verification,
+            and expiry handling
+          </li>
+          <li>
+            🛠️ <strong>Custom Middleware</strong>: JWT authentication, file
+            upload handling, and centralized error management
+          </li>
+          <li>
+            🧩 <strong>Modular Architecture</strong>: Follows MVC and repository
+            pattern using ES6 modules for clean, scalable code
+          </li>
+          <li>
+            ☁️ <strong>Deployment</strong>: Fully deployed on AWS EC2 (Ubuntu)
+            with Nginx reverse proxy and HTTPS via Certbot (Let's Encrypt)
+          </li>
+        </ul>
+      </section>
 
-      <p>
-        <strong>GitHub:</strong>
-        <a
-          href="https://github.com/anshuliitb/Social-Media-Project"
-          target="_blank"
-          >Source Code</a
-        >
-      </p>
+      <section>
+        <h2>🔗 API Testing & Docs</h2>
+        <p>
+          <strong>Postman Collection:</strong>
+          <a
+            href="https://www.postman.com/supply-astronaut-3411330/social-media-project/collection/qsf14w4/anshul-s-social-media-project?action=share&creator=38256946"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Test the API via Postman</a
+          >
+        </p>
+        <p>
+          📘 For complete details, setup guide, and route descriptions, refer to
+          the
+          <a
+            href="https://github.com/anshuliitb/Social-Media-Project/blob/main/README.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            >README</a
+          >.
+        </p>
+        <p>
+          <strong>GitHub:</strong>
+          <a
+            href="https://github.com/anshuliitb/Social-Media-Project"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Source Code</a
+          >
+        </p>
+        <p>
+          <strong>Developed by:</strong>
+          <a
+            href="https://github.com/anshuliitb"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Anshul Mahor</a
+          >
+        </p>
+      </section>
 
-      <p>
-        <strong>Author:</strong>
-        <a href="https://github.com/anshuliitb" target="_blank">Anshul Mahor</a>
-      </p>
-    </div>
+      <footer>&copy; 2025 Anshul Mahor | All Rights Reserved</footer>
+    </main>
   </body>
 </html>
