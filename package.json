@@ -1,14 +1,14 @@
 {
   "name": "social-media-project",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scalable backend RESTful API for a full-featured social media app using Node.js, Express, and MongoDB.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Anshul Mahor",
+  "license": "MIT",
   "type": "module",
   "dependencies": {
     "bcrypt": "^6.0.0",
