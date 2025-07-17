@@ -5,6 +5,7 @@ import { fileURLToPath } from "url";
 
 import PostsRepository from "./posts.repository.js";
 import CustomError from "../../errorHandlers/customErrorClass.js";
+import PostsModel from "./posts.model.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -166,7 +167,7 @@ export default class PostsController {
       );
 
       if (deletedPost) {
-        const imageUrl = deletedPost.imageUrl;
+        const imageUrl = deletedPost.postImage;
         const imageSubPath = imageUrl.split("/uploads/")[1];
         const savedImagePath = path.join(
           __dirname,
@@ -219,10 +220,44 @@ export default class PostsController {
         });
       }
 
+      let PostUserId = await PostsModel.findById(postId);
+      PostUserId = PostUserId.userId;
+
+      if (req.user._id != PostUserId) {
+        if (req.file) {
+          const savedImagePath = req.file.path;
+          if (savedImagePath) {
+            fs.unlink(savedImagePath, (err) => {
+              if (err)
+                console.log(
+                  "Error deleting update post image upload tried by another user!",
+                  err
+                );
+              else
+                console.log(
+                  "Deleted update post image file as update tried by another user!"
+                );
+            });
+          }
+        }
+        return res.status(401).send({
+          success: false,
+          message: "User can only update his own post!",
+        });
+      }
+
+      const imagePath = req.file?.path.replace(/\\/g, "/").replace("src/", "");
+      const imageUrl = imagePath
+        ? `${req.protocol}://${req.get("host")}/${imagePath}`
+        : undefined;
+
       const updatedPost = await this.postsRepository.updateUserPost(
         req.user._id,
         postId,
-        req.body
+        {
+          ...req.body,
+          ...(imageUrl && { postImage: imageUrl }),
+        }
       );
 
       if (updatedPost) {
@@ -239,6 +274,24 @@ export default class PostsController {
       }
     } catch (error) {
       console.log(error);
+
+      if (req.file) {
+        const savedImagePath = req.file.path;
+        if (savedImagePath) {
+          fs.unlink(savedImagePath, (err) => {
+            if (err)
+              console.log(
+                "Error deleting update post image after failure:",
+                err
+              );
+            else
+              console.log(
+                "Deleted update post image file as error occurred during update!"
+              );
+          });
+        }
+      }
+
       if (error instanceof CustomError) return next(error);
 
       res.status(500).send({

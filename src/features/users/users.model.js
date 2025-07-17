@@ -19,7 +19,7 @@ const registerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    avatarUrl: {
+    avatarImage: {
       type: String,
       required: true,
     },

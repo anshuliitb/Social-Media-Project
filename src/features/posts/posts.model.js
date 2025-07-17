@@ -4,7 +4,7 @@ const postSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     body: { type: String, required: true },
-    imageUrl: {
+    postImage: {
       type: String,
       required: true,
     },

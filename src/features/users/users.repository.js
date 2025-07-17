@@ -1,4 +1,6 @@
 import jwt from "jsonwebtoken";
+import fs from "fs";
+import path from "path";
 
 import CustomError from "../../errorHandlers/customErrorClass.js";
 import { verifyHashedPassword } from "../../utils/users.passwordHashing.js";
@@ -9,13 +11,13 @@ import TokenModel from "./users.token.model.js";
 import FriendshipModel from "../friendship/friendship.model.js";
 
 export default class UserRepository {
-  async registerUser(name, email, password, gender, avatarUrl) {
+  async registerUser(name, email, password, gender, avatarImage) {
     const newUser = new UserModel({
       name,
       email,
       password,
       gender,
-      avatarUrl,
+      avatarImage,
     });
 
     return await newUser.save();
@@ -90,11 +92,29 @@ export default class UserRepository {
   }
 
   async updateUserDetails(id, userData) {
+    let avatarUrlPrev = await UserModel.findById(id);
+    avatarUrlPrev = avatarUrlPrev.avatarImage;
+
     const userFromDb = await UserModel.findByIdAndUpdate(id, userData, {
       new: true,
       runValidators: true,
       projection: "-password -__v",
     });
+
+    if (userData.avatarImage) {
+      const relativePath = avatarUrlPrev.split("/uploads")[1];
+      const deletePath = path.resolve("src/uploads" + relativePath);
+
+      fs.unlink(deletePath, (err) => {
+        if (err)
+          console.log(
+            "Error deleting previous avatar after updating it with new one",
+            err
+          );
+        else console.log("Deleted previous avatar after saving new one");
+      });
+    }
+
     return userFromDb;
   }
 }

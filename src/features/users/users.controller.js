@@ -174,6 +174,8 @@ export default class UserController {
   async updateDetails(req, res, next) {
     try {
       const { userId } = req.params;
+      const { password } = req.body;
+
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).send({
           success: false,
@@ -181,10 +183,42 @@ export default class UserController {
         });
       }
 
-      const password = await hashingPassword(req.body.password);
+      if (req.user._id != userId) {
+        if (req.file) {
+          const savedImagePath = req.file.path;
+          if (savedImagePath) {
+            fs.unlink(savedImagePath, (err) => {
+              if (err)
+                console.log(
+                  "Error deleting update avatar image upload tried by another user!",
+                  err
+                );
+              else
+                console.log(
+                  "Deleted update avatar image file as update tried by another user!"
+                );
+            });
+          }
+        }
+        return res.status(401).send({
+          success: false,
+          message: "User can only update his own details!",
+        });
+      }
+
+      if (password) {
+        var hashedPassword = await hashingPassword(req.body.password);
+      }
+
+      const avatarPath = req.file?.path.replace(/\\/g, "/").replace("src/", "");
+      const avatarUrl = avatarPath
+        ? `${req.protocol}://${req.get("host")}/${avatarPath}`
+        : undefined;
+
       const userUpdated = await this.userRepository.updateUserDetails(userId, {
         ...req.body,
-        password,
+        ...(password && { password: hashedPassword }),
+        ...(avatarPath && { avatarImage: avatarUrl }),
       });
 
       if (!userUpdated) {
@@ -201,6 +235,23 @@ export default class UserController {
       });
     } catch (error) {
       console.log(error);
+
+      if (req.file) {
+        const savedImagePath = req.file.path;
+        if (savedImagePath) {
+          fs.unlink(savedImagePath, (err) => {
+            if (err)
+              console.log(
+                "Error deleting update avatar image after failure:",
+                err
+              );
+            else
+              console.log(
+                "Deleted update avatar image file as error occurred during update!"
+              );
+          });
+        }
+      }
 
       res.status(500).send({
         success: false,

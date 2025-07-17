@@ -1,11 +1,14 @@
+import path from "path";
+import fs from "fs";
+
 import CustomError from "../../errorHandlers/customErrorClass.js";
 import CommentsModel from "../comments/comments.model.js";
 import LikeModel from "../likes/likes.model.js";
 import PostsModel from "./posts.model.js";
 
 export default class PostsRepository {
-  async createNewPost(title, body, imageUrl, userId) {
-    const post = new PostsModel({ title, body, imageUrl, userId });
+  async createNewPost(title, body, postImage, userId) {
+    const post = new PostsModel({ title, body, postImage, userId });
     return await post.save();
   }
 
@@ -58,14 +61,35 @@ export default class PostsRepository {
     if (!(await PostsModel.findById(postId)))
       throw new CustomError("Post not found!", 404);
 
-    const updatedPost = await PostsModel.findOneAndUpdate(
-      {
-        userId,
-        _id: postId,
-      },
-      newData,
-      { new: true, runValidators: true }
-    );
+    let postUrlPrev = await PostsModel.findById(postId);
+    postUrlPrev = postUrlPrev.postImage;
+
+    if (newData.title || newData.body || newData.postImage) {
+      var updatedPost = await PostsModel.findOneAndUpdate(
+        {
+          userId,
+          _id: postId,
+        },
+        newData,
+        { new: true, runValidators: true }
+      );
+    } else {
+      throw new CustomError("Send required data!", 404);
+    }
+
+    if (newData.postImage) {
+      const relativePath = postUrlPrev.split("/uploads")[1];
+      const deletePath = path.resolve("src/uploads" + relativePath);
+
+      fs.unlink(deletePath, (err) => {
+        if (err)
+          console.log(
+            "Error deleting previous avatar after updating it with new one",
+            err
+          );
+        else console.log("Deleted previous avatar after saving new one");
+      });
+    }
 
     return updatedPost;
   }

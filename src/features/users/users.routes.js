@@ -40,7 +40,7 @@ userRouter
 
 userRouter
   .route("/update-details/:userId")
-  .put(jwtAuth, (req, res, next) =>
+  .put(jwtAuth, uploadAvatar.single("avatarImage"), (req, res, next) =>
     userController.updateDetails(req, res, next)
   );
 
